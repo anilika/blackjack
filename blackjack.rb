@@ -1,6 +1,6 @@
 class BlackJack
   attr_accessor :player, :dealer, :stake
-  MIN = 10
+  MIN = 10.0
   def initialize
     puts "Welcome to the game of Black Jack"
     @player = Player.new(check_name, check_bank)
@@ -22,8 +22,9 @@ class BlackJack
   def new_kon
   numb_con = 0
     loop do
-      break if numb_con > 8
+      return true if numb_con > 1
       show_balanse
+      return false if nil_balans
       puts "Type 'q' to exit"
       return false if  check_stake == :out
       make_stake
@@ -44,21 +45,15 @@ class BlackJack
       else
         add_winning
       end
-      return false unless check_balans
     end
   end
 
   def dealer_turn
-    sum, sum_with_a = @dealer.dealer_sum_cards
-    puts sum
-    puts sum_with_a
-    until sum >= 17 || sum_with_a >= 17
+    until (@dealer.sum_dealer_cards).min >= 17
       @dealer.deal_card_dealer
-      sum, sum_with_a = @dealer.dealer_sum_cards
-      puts sum
-      puts sum_with_a
     end
-    false if @dealer.dealer_to_mach
+    show_maps
+    @dealer.dealer_to_mach ? false : true
   end
 
 
@@ -70,14 +65,17 @@ class BlackJack
       when "end turn"
         break
       when "hit me"
-        if hit_me
+        hit_me
+        if @dealer.check_21_player_cards && (@dealer.dealer_cards).size == 1
           add_winning
           return true
-        elsif hit_me == 0
-          redo
-        else
+        elsif @dealer.check_21_player_cards
+          return false
+        elsif @dealer.player_to_mach
           loos
           return true
+        else
+          redo
         end
       else
         puts "Wrong argument!"
@@ -89,13 +87,6 @@ class BlackJack
   def hit_me
     @dealer.deal_card_player
     show_maps
-    if @dealer.player_to_mach
-      false
-    elsif @dealer.check_21_player_cards
-      true
-    else
-      0
-    end
   end
 
   def first_deal_cards
@@ -127,8 +118,8 @@ class BlackJack
     bank
   end
 
-  def check_balans
-    false if @player.bank < MIN
+  def nil_balans
+    true if @player.bank < MIN
   end
 
   def check_stake
@@ -227,60 +218,37 @@ class BlackJack
       @dealer_cards += deal_card
     end
 
-    def check_a(cards_on_desk)
-      a = cards_on_desk.select{|card| card.include?"A"}
-    end
-
-    def sum_cards(cards_on_desk)
-      sum_cards = 0
-      cards_numb = cards_on_desk.transpose.last
-      cards_numb.each do |card|
-        sum_cards += card.to_i
+    def sum_cards(cards)
+      first_sum_cards = 0
+      i_a = 0
+      sum_cards = []
+      cards.each do |card|
+        i_a += 1 if card.include?"A"
+        first_sum_cards += card.last.to_i
+      end
+      sum_cards << first_sum_cards
+      i_a.times do
+        next_sum = first_sum_cards -= 10
+        sum_cards << next_sum if next_sum > 0
       end
       sum_cards
     end
 
-    def sum_with_a(cards_on_desk)
-      unless check_a(cards_on_desk) == []
-        a = check_a(cards_on_desk)
-        sum_cards = 0
-        a.size.times do
-            sum_cards -= 10
-            break if @sum_cards == 21
-        end
-        sum_cards
-      else
-        0
-      end
+    def sum_dealer_cards
+      sum_cards(@dealer_cards)
     end
 
-    def check_21(cards_on_desk)
-      sum_cards = sum_cards(cards_on_desk)
-      if  sum_cards == 21
-        true
-      elsif sum_cards > 21
-        true if sum_with_a(cards_on_desk) == 21
-      else
-        false
-      end
+    def sum_player_cards
+      sum_cards(@player_cards)
     end
 
-    def too_much(cards_on_desk)
-      if sum_cards(cards_on_desk) <= 21
-        false
-      elsif
-        if check_a(cards_on_desk) == []
-          false
-        else
-          sum_cards = 0
-          a = check_a(cards_on_desk)
-          a.size.times do
-            sum_cards -= 10
-            break if sum_cards <= 21
-          end
-          puts sum_cards > 21 ? true : false
-        end
-      end
+    def too_much(cards_on_deck)
+      mach_numb = sum_cards(cards_on_deck).select{|numb| numb > 21}
+      mach_numb.size == sum_cards(cards_on_deck).size ? true : false
+    end
+
+    def check_21(sum_cards)
+      sum_cards.include?(21) ? true : false
     end
 
     def player_to_mach
@@ -292,38 +260,20 @@ class BlackJack
     end
 
     def check_21_player_cards
-      check_21(@player_cards)
+      check_21(sum_player_cards)
     end
 
     def check_21_dealer_cards
-      check_21(@dealer_cards)
-    end
-
-    def dealer_sum_cards
-      return sum_cards(@dealer_cards), sum_with_a(@dealer_cards)
+      check_21(sum_dealer_cards)
     end
 
     def check_cards
-      player_sums = dealer_sums = []
-      player_sums << sum_cards(@player_cards)
-      player_sums << sum_with_a(@player_cards)
-      dealer_sums << sum_cards(@dealer_cards)
-      dealer_sums << sum_with_a(@dealer_cards)
-      if dealer_sums.max >= player_sums.max
+      dealer_valid_sum = sum_dealer_cards.select{|numb| numb <= 21}
+      player_valid_sum = sum_player_cards.select{|numb| numb <= 21}
+      if dealer_valid_sum.max >= player_valid_sum.max
         true
       else
         false
-      end
-    end
-
-    def sum_num_dealer_cards
-      dealer_sum = []
-      dealer_sum << sum_cards(@dealer_cards)
-      dealer_sum << sum_with_t(@dealer_cards)
-      if dealer_sum.min.to_i == 0
-        dealer_sum.max.to_i
-      else
-        dealer_sum.min.to_i
       end
     end
 
