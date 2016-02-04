@@ -1,18 +1,155 @@
 class BlackJack
   attr_accessor :player, :dealer, :stake
   MIN = 10
-  def initialize(player_name, bank)
-    @player = Player.new(player_name, bank)
+  def initialize
+    puts "Welcome to the game of Black Jack"
+    @player = Player.new(check_name, check_bank)
     @dealer = Dealer.new
     @stake = 0.0
   end
 
-  def check_stake
-    true if @player.balance_sheet_audit > @stake && @stake >= MIN
+  def new_game
+    loop do
+      @dealer.create_deck
+      @dealer.shuffle_deck
+      unless new_kon
+        puts "game over"
+        break
+      end
+    end
   end
 
-  def make_stake(new_stake)
-    @stake = new_stake
+  def new_kon
+  numb_con = 0
+    loop do
+      break if numb_con > 8
+      show_balanse
+      puts "Type 'q' to exit"
+      return false if  check_stake == :out
+      make_stake
+      first_deal_cards
+      numb_con += 1
+      if @dealer.check_21_player_cards
+        puts "It`s a BlackJack!"
+        add_winning
+        redo
+      end
+      redo if player_turn
+      unless dealer_turn
+        add_winning
+        redo
+      end
+      if @dealer.check_cards
+        loos
+      else
+        add_winning
+      end
+      return false unless check_balans
+    end
+  end
+
+  def dealer_turn
+    sum, sum_with_a = @dealer.dealer_sum_cards
+    puts sum
+    puts sum_with_a
+    until sum >= 17 || sum_with_a >= 17
+      @dealer.deal_card_dealer
+      sum, sum_with_a = @dealer.dealer_sum_cards
+      puts sum
+      puts sum_with_a
+    end
+    false if @dealer.dealer_to_mach
+  end
+
+
+  def player_turn
+    loop do
+      puts "Dial 'hit me' or 'end turn'"
+      act = gets.chomp
+      case act
+      when "end turn"
+        break
+      when "hit me"
+        if hit_me
+          add_winning
+          return true
+        elsif hit_me == 0
+          redo
+        else
+          loos
+          return true
+        end
+      else
+        puts "Wrong argument!"
+        redo
+      end
+    end
+  end
+
+  def hit_me
+    @dealer.deal_card_player
+    show_maps
+    if @dealer.player_to_mach
+      false
+    elsif @dealer.check_21_player_cards
+      true
+    else
+      0
+    end
+  end
+
+  def first_deal_cards
+    @dealer.deal_card_player
+    @dealer.deal_card_player
+    @dealer.deal_card_dealer
+    show_maps
+  end
+
+  def check_name
+    player_name = ""
+    loop do
+      puts "Enter the name of the player"
+      player_name = gets.chomp
+      break unless player_name.size == 0
+      puts "Invalid name"
+    end
+    player_name
+  end
+
+  def check_bank
+    bank = 0
+    loop do
+      puts "Put the money into the account, the minimum rate of 10"
+      bank = gets.chomp.to_f
+      break if bank >= MIN
+      puts "Not enough money"
+    end
+    bank
+  end
+
+  def check_balans
+    false if @player.bank < MIN
+  end
+
+  def check_stake
+    loop do
+      puts "Yor bet"
+      bet = gets.chomp
+      return :out if bet == 'q'
+      if bet.to_f > @player.bank
+        puts "Your stak more your bank"
+        puts "Enter the new rates"
+      elsif bet.to_f < MIN
+        puts "Your stake less min stake"
+        puts "Enter the new rates"
+      else
+        @stake = bet.to_f
+        break
+      end
+    end
+  end
+
+  def make_stake
     @player.bank -= @stake
   end
 
@@ -31,14 +168,21 @@ class BlackJack
   end
 
   def add_winning
+    puts "You win!"
     @player.bank += @stake * 1.5
     nil_stake
+    @dealer.nil_cards
   end
 
   def nil_stake
     @stake = 0
   end
 
+  def loos
+    puts "Your loose"
+    nil_stake
+    @dealer.nil_cards
+  end
 
 
   class Dealer
@@ -50,14 +194,14 @@ class BlackJack
     end
 
     def create_deck
-      part_cards = %w{ 2 3 4 5 6 7 8 9 10 J D K T }
+      part_cards = %w{ 2 3 4 5 6 7 8 9 10 J D K A }
       suits = %w{b s d h}
       @deck = []
       suits.each do |suit|
         part_cards.zip([suit] * part_cards.length) do |card|
           case card[0]
           when "J", "D", "K" then card.push("10")
-          when "T" then card.push("11")
+          when "A" then card.push("11")
           else
             card.push(card[0])
           end
@@ -83,27 +227,24 @@ class BlackJack
       @dealer_cards += deal_card
     end
 
-    def check_t(cards_on_desk)
-      @t = []
-      cards_on_desk.each do |card|
-        @t += card if card[0].include?"T"
-      end
-      @t
+    def check_a(cards_on_desk)
+      a = cards_on_desk.select{|card| card.include?"A"}
     end
 
     def sum_cards(cards_on_desk)
       sum_cards = 0
-      cards_on_desk.each do |card|
-        sum_cards += card.last.to_i
+      cards_numb = cards_on_desk.transpose.last
+      cards_numb.each do |card|
+        sum_cards += card.to_i
       end
       sum_cards
     end
 
-    def sum_with_t(cards_on_desk)
-      unless check_t(cards_on_desk) == []
-        t = check_t(cards_on_desk)
+    def sum_with_a(cards_on_desk)
+      unless check_a(cards_on_desk) == []
+        a = check_a(cards_on_desk)
         sum_cards = 0
-        t.size.times do
+        a.size.times do
             sum_cards -= 10
             break if @sum_cards == 21
         end
@@ -118,7 +259,7 @@ class BlackJack
       if  sum_cards == 21
         true
       elsif sum_cards > 21
-        true if sum_with_t(cards_on_desk) == 21
+        true if sum_with_a(cards_on_desk) == 21
       else
         false
       end
@@ -128,16 +269,16 @@ class BlackJack
       if sum_cards(cards_on_desk) <= 21
         false
       elsif
-        if check_t(cards_on_desk) == []
+        if check_a(cards_on_desk) == []
           false
         else
           sum_cards = 0
-          t = check_t(cards_on_desk)
-          t.size.times do
+          a = check_a(cards_on_desk)
+          a.size.times do
             sum_cards -= 10
-            break if sum_cards < 21
+            break if sum_cards <= 21
           end
-          puts true if sum_cards > 21
+          puts sum_cards > 21 ? true : false
         end
       end
     end
@@ -158,12 +299,16 @@ class BlackJack
       check_21(@dealer_cards)
     end
 
+    def dealer_sum_cards
+      return sum_cards(@dealer_cards), sum_with_a(@dealer_cards)
+    end
+
     def check_cards
       player_sums = dealer_sums = []
       player_sums << sum_cards(@player_cards)
-      player_sums << sum_with_t(@player_cards)
+      player_sums << sum_with_a(@player_cards)
       dealer_sums << sum_cards(@dealer_cards)
-      dealer_sums << sum_with_t(@dealer_cards)
+      dealer_sums << sum_with_a(@dealer_cards)
       if dealer_sums.max >= player_sums.max
         true
       else
@@ -195,99 +340,9 @@ class BlackJack
       @player_name = player_name
       @bank = bank.to_f
     end
-
-    def balance_sheet_audit
-      @bank if @bank > MIN
-    end
-
   end
 end
-puts "Welcome to the game of Black Jack"
-puts "Enter the name of the player"
-player_name = gets.chomp
-puts "Put the money into the account, the minimum rate of 10"
-bank = gets.chomp
-my_game = BlackJack.new(player_name, bank.to_i)
-loop do
-  unless my_game.player.balance_sheet_audit
-    puts "not enough money, game over"
-    break
-  end
-  my_game.dealer.create_deck
-  my_game.dealer.shuffle_deck
-  puts "Your balanse #{my_game.player.bank}"
-  8.times do
-    loop do
-      puts "Type 'q' to exit"
-      puts "Your balanse #{my_game.player.bank}"
-      puts "Yor bet"
-      bet = gets.chomp
-      return if bet == 'q'
-      my_game.make_stake(bet.to_i)
-      puts "Your balanse #{my_game.player.bank}"
-      break if my_game.check_stake
-      puts "Rate exceeds the limit on the account"
-      puts "Or less than the minimum rate"
-      puts "Enter the new rates"
-    end
-    my_game.dealer.deal_card_player
-    my_game.dealer.deal_card_player
-    my_game.dealer.deal_card_dealer
-    my_game.show_maps
-    if my_game.dealer.check_21_player_cards
-        my_game.add_winning
-        puts "You won, it`s a BlackJack!"
-        my_game.nil_stake
-        my_game.dealer.nil_cards
-        redo
-    end
-    puts "Dial 'hit me' or 'end turn'"
-    act = gets.chomp
-    until act == "end turn"
-      case act
-      when "hit me"
-        my_game.dealer.deal_card_player
-        my_game.show_maps
-        if my_game.dealer.player_to_mach
-          puts "Too much"
-          puts "Your loose"
-          my_game.nil_stake
-          my_game.dealer.nil_cards
-          break
-        elsif my_game.dealer.check_21_player_cards
-          puts "21"
-        else
-          puts "Dial 'hit me' or 'end turn'"
-          act = gets.chomp
-        end
-      when "end turn"
-        act = "end turn"
-      else
-        puts "Wrong argument!"
-      end
-    end
-    while my_game.dealer.sum_num_dealer_cards < 17
-      my_game.dealer.deal_card_dealer
-    end
-    my_game.show_maps
-    if my_game.dealer.dealer_to_mach
-      puts "Dealer loose. You win!"
-      my_game.add_winning
-      my_game.nil_stake
-      my_game.dealer.nil_cards
-      break
-    end
-    if my_game.dealer.check_cards
-      puts "Your loose"
-      my_game.nil_stake
-      my_game.dealer.nil_cards
-      break
-    else
-      puts "Dealer loose. You win!"
-      my_game.add_winning
-      my_game.nil_stake
-      my_game.dealer.nil_cards
-      break
-    end
-  end
-end
+my_game = BlackJack.new
+my_game.new_game
+
+
