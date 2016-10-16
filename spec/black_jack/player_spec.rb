@@ -21,29 +21,13 @@ describe 'Player' do
   end
 
   describe '#make_rate' do
-    before(:all) do
-      module BlackJack
-        MIN_RATE = 10
-      end
+    it 'makes variable @rate equal value that was passed as argument' do
+      @player.make_rate(20)
+      expect(@player.rate).to eq(20)
     end
-
-    context 'when rate less then minimum rate' do
-      it 'returns false' do
-        expect(@player.make_rate(2)).to be_falsey
-      end
+    it 'subtracts value that was passed as argument from variable @cash' do
+      @player.make_rate(38).to
+      expect(@player.cash).to eq(62)
     end
-
-    context 'when rate more then cash' do
-      it 'returns false' do
-        expect(@player.make_rate(200)).to be_falsey
-      end
-    end
-
-    context 'when rate more then minimum rate and less or equal cash' do
-      it 'returns rate' do
-        expect(@player.make_rate(20)).to eq(20)
-      end
-    end
-
   end
 end
