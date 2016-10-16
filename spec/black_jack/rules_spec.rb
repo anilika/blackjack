@@ -10,15 +10,25 @@ describe 'Rules' do
   end
 
   describe '#rate_valid?' do
-    context 'when rate less then minimum rate' do
-      it 'returns false' do
-        expect(@rules.rate_valid?(2)).to be_falsey
+    before(:all) do
+      @player = BlackJack::Player.new('John', 100)
+    end
+
+    context 'when rate more then minimum rate and less or equal player cash' do
+      it 'returns rate' do
+        expect(@rules.make_rate(20, @player.cash)).to eq(20)
       end
     end
 
-    context 'when rate more then minimum rate' do
-      it 'returns rate' do
-        expect(@rules.make_rate(20)).to eq(20)
+    context 'when rate less then minimum rate' do
+      it 'returns false' do
+        expect(@rules.rate_valid?(2, @player.cash)).to be_falsey
+      end
+    end
+
+    context 'when rate more then cash' do
+      it 'returns false' do
+        expect(@rules.make_rate(200, @player.cash)).to be_falsey
       end
     end
   end
