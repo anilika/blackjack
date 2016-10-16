@@ -30,4 +30,11 @@ describe 'Player' do
       expect(@player.cash).to eq(62)
     end
   end
+
+  describe '#take_win' do
+    it 'adds value that was passed as argument to variable @cash' do
+      @player.take_win(25)
+      expect(@player.cash).to eq(125)
+    end
+  end
 end
