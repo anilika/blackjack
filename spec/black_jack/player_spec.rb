@@ -24,7 +24,7 @@ describe 'Player' do
       expect(@player.rate).to eq(20)
     end
     it 'subtracts value that was passed as argument from variable @cash' do
-      @player.make_rate(38).to
+      @player.make_rate(38)
       expect(@player.cash).to eq(62)
     end
   end
