@@ -13,10 +13,8 @@ describe 'Player' do
       expect(@player.cash).to eq(100)
     end
 
-    it 'allows reading and writing for :rate' do
+    it 'allows reading for :rate' do
       expect(@player.rate).to eq(0)
-      @player.rate(10)
-      expect(@player.rate).to eq(10)
     end
   end
 
