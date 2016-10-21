@@ -1,4 +1,5 @@
 require 'black_jack/dealer'
+require 'black_jack/card'
 
 describe 'Dealer' do
   before(:each) do

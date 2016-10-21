@@ -10,8 +10,8 @@ describe 'Card' do
       expect(@card.name).to eq('As')
     end
 
-    it 'allows reading for :point' do
-      expect(@card.point).to eq([11, 1])
+    it 'allows reading for :points' do
+      expect(@card.points).to eq([11, 1])
     end
   end
 end
