@@ -88,25 +88,6 @@ describe 'Rules' do
     end
   end
 
-  describe '#create_card_deck' do
-    before(:all) do
-      @dealer.create_card_deck
-    end
-
-    it 'creates variable @card_deсk' do
-      expect(@dealer.card_deсk.empty?).to be_falsey
-    end
-    it 'puts in variable @card_deck array of cards' do
-      expect(@dealer.card_deck).to be_an(Array)
-    end
-    it 'creates 42 cards' do
-      expect(@dealer.card_deсk.size).to eq(42)
-    end
-    it 'creates cards which are instance of class Card' do
-      expect(@dealer.card_deсk.sample).to be_instance_of(Card)
-    end
-  end
-
   describe '#split' do
     before(:each) do
       @player.cards = []
