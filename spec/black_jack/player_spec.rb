@@ -16,6 +16,10 @@ describe 'Player' do
     it 'allows reading for :rate' do
       expect(@player.rate).to eq(0)
     end
+
+    it 'allows reading for :cards' do
+      expect(@player.cards).to eq([])
+    end
   end
 
   describe '#make_rate' do
