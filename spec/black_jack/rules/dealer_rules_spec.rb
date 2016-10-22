@@ -2,7 +2,7 @@ describe 'Dealer' do
   before(:all) do
     class TestDealer
       attr_reader :card_deсk
-      include Rules::Dealer
+      include BlackJack::Rules::Dealer
     end
     @dealer = TestDealer.new
   end
