@@ -1,11 +1,14 @@
 require 'black_jack/card_deck'
+require 'black_jack/card'
 
 describe 'CardDeck' do
   before(:each) do
-    class CardDeck
-      attr_reader :cards
+    module BlackJack
+      class CardDeck
+        attr_reader :cards
+      end
     end
-    @card_deck = CardDeck.new
+    @card_deck = BlackJack::CardDeck.new
   end
 
   describe 'private method to initialize #create_card_deck' do
@@ -14,10 +17,10 @@ describe 'CardDeck' do
       expect(@card_deck.cards).to be_an(Array)
     end
     it 'creates 42 cards' do
-      expect(@card_deck.cards.size).to eq(42)
+      expect(@card_deck.cards.size).to eq(52)
     end
     it 'creates cards which are instance of class Card' do
-      expect(@card_deck.cards.sample).to be_instance_of(Card)
+      expect(@card_deck.cards.sample).to be_instance_of(BlackJack::Card)
     end
   end
 
@@ -45,7 +48,7 @@ describe 'CardDeck' do
 
   describe '#number_of' do
     it 'returns the number of elements in array of cards' do
-      expect(@card_deck.number_of).to eq(42)
+      expect(@card_deck.number_of).to eq(52)
     end
   end
 
