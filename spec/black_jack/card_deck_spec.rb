@@ -8,6 +8,19 @@ describe 'CardDeck' do
     @card_deck = CardDeck.new
   end
 
+  describe 'private method to initialize #create_card_deck' do
+    it 'creates array' do
+      expect(@card_deck.cards).not_to be_nil
+      expect(@card_deck.cards).to be_an(Array)
+    end
+    it 'creates 42 cards' do
+      expect(@card_deck.cards.size).to eq(42)
+    end
+    it 'creates cards which are instance of class Card' do
+      expect(@card_deck.cards.sample).to be_instance_of(Card)
+    end
+  end
+
   describe '#upper_card' do
     it 'deletes first card from array of cards and returns it' do
       first_card = @card_deck.cards.first

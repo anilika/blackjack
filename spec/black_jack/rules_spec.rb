@@ -128,21 +128,6 @@ describe 'Rules' do
   end
 
   describe 'CardDeck' do
-    describe '#create_card_deck' do
-      it 'creates variable @card_deсk' do
-        expect(@card_deck.card_deсk).to be_nil
-        @card_deck.create_card_deck
-        expect(@card_deck.card_deck).not_to be_nil
-      end
-      it 'puts in variable @card_deck array of cards' do
-        expect(@card_deck.card_deck).to be_an(Array)
-      end
-      it 'creates 42 cards' do
-        expect(@card_deck.card_deсk.size).to eq(42)
-      end
-      it 'creates cards which are instance of class Card' do
-        expect(@card_deck.card_deсk.sample).to be_instance_of(Card)
-      end
-    end
+
   end
 end
