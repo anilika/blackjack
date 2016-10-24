@@ -13,22 +13,22 @@ describe 'Player' do
       expect(@player.cash).to eq(100)
     end
 
-    it 'allows reading for :rate' do
-      expect(@player.rate).to eq(0)
+    it 'allows reading for :bet' do
+      expect(@player.bet).to eq(0)
     end
 
-    it 'allows reading for :cards' do
-      expect(@player.cards).to eq([])
+    it 'allows reading for :hands' do
+      expect(@player.hands).to eq([])
     end
   end
 
-  describe '#make_rate' do
-    it 'makes variable @rate equal value that was passed as argument' do
-      @player.make_rate(20)
-      expect(@player.rate).to eq(20)
+  describe '#make_bet' do
+    it 'makes variable @bet equal value that was passed as argument' do
+      @player.make_bet(20)
+      expect(@player.bet).to eq(20)
     end
     it 'subtracts value that was passed as argument from variable @cash' do
-      @player.make_rate(38)
+      @player.make_bet(38)
       expect(@player.cash).to eq(62)
     end
   end

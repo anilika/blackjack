@@ -1,12 +1,12 @@
 module BlackJack
   class Player
-    attr_reader :name, :cash, :rate, :cards
+    attr_reader :name, :cash, :bet, :hands
 
     def initialize(name, cash)
       @name = name
       @cash = cash
-      @rate = 0
-      @cards = []
+      @bet = 0
+      @hands = [Hand.new]
     end
 
     def make_rate(rate)
