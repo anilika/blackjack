@@ -24,6 +24,7 @@ module BlackJack
     def make_bet_if_valid(bet)
       if bet_valid?(bet)
         hands.first.add_bet(bet)
+        @cash -= bet
         true
       else
         false
