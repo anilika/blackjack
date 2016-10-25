@@ -17,13 +17,20 @@ describe 'Hand' do
   end
 
   describe '#add_cards' do
-    it 'pushes each card that was passed as argument in variable @cards' do
+    it 'pushes each card that was passed as argument in variable :cards' do
       first_card = BlaskJack::Card.new('9s', [9])
       @hand.add_cards(first_card)
       expect(@hand.cards).to eq(first_card)
       second_card = (BlaskJack::Card.new('As', [11, 1]))
       @hand.add_card(second_card)
       expect(@hand.cards).to eq([first_card, second_card])
+    end
+  end
+
+  describe '#add_bet' do
+    it 'pushes value that was passed as argument in variable :bet' do
+      @hand.add_bet(20)
+      expect(@hand.bet).to eq(20)
     end
   end
 

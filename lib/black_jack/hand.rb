@@ -1,8 +1,10 @@
 module BlackJack
   class Hand
+    attr_reader :cards, :bet
+
     def initialize
       @cards = []
-      @rate = nil
+      @bet = nil
     end
 
     def show_cards
@@ -18,6 +20,10 @@ module BlackJack
 
     def add_card(card)
       @cards << card
+    end
+
+    def add_bet(bet)
+      @bet = bet
     end
   end
 end
