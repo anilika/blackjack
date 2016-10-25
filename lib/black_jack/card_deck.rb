@@ -47,6 +47,3 @@ module BlackJack
     end
   end
 end
-
-s = BlackJack::CardDeck.new
-print s.cards

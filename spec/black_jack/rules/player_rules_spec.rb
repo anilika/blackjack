@@ -47,7 +47,7 @@ describe 'Player' do
       end
     end
 
-    caontext 'when player is not allowed to split' do
+    context 'when player is not allowed to split' do
       it 'returns false' do
         @player.cards << BlaskJack::Card.new('8s', [8])
         @player.cards << BlaskJack::Card.new('Ab', [11, 1])
