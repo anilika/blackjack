@@ -1,5 +1,5 @@
 module BlackJack
   module Rules
-    MIN_RATE = 10
+    MIN_BET = 10
   end
 end
