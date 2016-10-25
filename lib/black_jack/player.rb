@@ -17,5 +17,6 @@ module BlackJack
     def take_win(win)
       @cash += win
     end
+
   end
 end

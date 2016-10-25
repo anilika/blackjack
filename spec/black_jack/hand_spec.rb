@@ -17,7 +17,7 @@ describe 'Hand' do
   end
 
   describe '#add_cards' do
-    it 'pushes each card passing as argument in variable @cards' do
+    it 'pushes each card that was passed as argument in variable @cards' do
       first_card = BlaskJack::Card.new('9s', [9])
       @hand.add_cards(first_card)
       expect(@hand.cards).to eq(first_card)
