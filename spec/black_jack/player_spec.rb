@@ -43,4 +43,17 @@ describe 'Player' do
       expect(@player.cash).to eq(125)
     end
   end
+
+  describe '#bet_valid?' do
+    context 'when bet valid' do
+      it 'returns true' do
+        expect(@player.bet_valid?(20)).to be_truthy
+      end
+    end
+    context 'when bet invalid' do
+      it 'returns false' do
+        expect(@player.bet_valid?(2)).to be_falsey
+      end
+    end
+  end
 end
