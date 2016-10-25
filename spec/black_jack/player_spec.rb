@@ -13,23 +13,27 @@ describe 'Player' do
       expect(@player.cash).to eq(100)
     end
 
-    it 'allows reading for :bet' do
-      expect(@player.bet).to eq(0)
-    end
-
     it 'allows reading for :hands' do
-      expect(@player.hands).to eq([])
+      expect(@player.hands).to be_an(Array)
     end
   end
 
-  describe '#make_bet' do
-    it 'makes variable @bet equal value that was passed as argument' do
-      @player.make_bet(20)
-      expect(@player.bet).to eq(20)
+  describe '#make_bet_if_valid' do
+    context 'when bet is valid' do
+      it 'returns true' do
+        expect(@player.make_bet_if_valid(20)).to be_truthy
+      end
+      it 'passes value that was passed as argument to hand' do
+        expect(@player.hands.last.bet).to eq(20)
+      end
+      it 'subtracts value that was passed as argument from variable :cash' do
+        expect(@player.cash).to eq(80)
+      end
     end
-    it 'subtracts value that was passed as argument from variable @cash' do
-      @player.make_bet(38)
-      expect(@player.cash).to eq(62)
+    context 'when bet is not valid' do
+      it 'return false' do
+        expect(@player.make_bet_if_valid(1)).to be_falsey
+      end
     end
   end
 
