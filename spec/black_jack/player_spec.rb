@@ -1,7 +1,7 @@
 require 'black_jack/player'
 
 describe 'Player' do
-  before(:each) do
+  before(:all) do
     @player = BlackJack::Player.new('John', 100)
   end
   describe 'attributes' do
@@ -40,7 +40,7 @@ describe 'Player' do
   describe '#take_win' do
     it 'adds value that was passed as argument to variable @cash' do
       @player.take_win(25)
-      expect(@player.cash).to eq(125)
+      expect(@player.cash).to eq(105)
     end
   end
 

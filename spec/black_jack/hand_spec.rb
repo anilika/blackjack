@@ -7,8 +7,8 @@ describe 'Hand' do
   end
 
   describe 'attributes' do
-    it 'allows reading and writing for :bet' do
-      @hand.bet = 20
+    it 'allows reading for :bet' do
+      @hand.add_bet(20)
       expect(@hand.bet).to eq(20)
     end
     it 'allows reading for :cards' do
@@ -18,10 +18,10 @@ describe 'Hand' do
 
   describe '#add_cards' do
     it 'pushes each card that was passed as argument in variable :cards' do
-      first_card = BlaskJack::Card.new('9s', [9])
-      @hand.add_cards(first_card)
-      expect(@hand.cards).to eq(first_card)
-      second_card = (BlaskJack::Card.new('As', [11, 1]))
+      first_card = BlackJack::Card.new('9s', [9])
+      @hand.add_card(first_card)
+      expect(@hand.cards).to eq([first_card])
+      second_card = (BlackJack::Card.new('As', [11, 1]))
       @hand.add_card(second_card)
       expect(@hand.cards).to eq([first_card, second_card])
     end
@@ -29,8 +29,9 @@ describe 'Hand' do
 
   describe '#add_bet' do
     it 'pushes value that was passed as argument in variable :bet' do
-      @hand.add_bet(20)
       expect(@hand.bet).to eq(20)
+      @hand.add_bet(15)
+      expect(@hand.bet).to eq(15)
     end
   end
 
