@@ -1,3 +1,5 @@
+require_relative 'rules/rules'
+
 module BlackJack
   class Hand
     attr_reader :cards, :bet
@@ -7,15 +9,18 @@ module BlackJack
       @bet = nil
     end
 
-    def show_cards
+    def cards_names
       @cards.map(&:name)
     end
 
-    def sums_of_cards
-      @cards.map { |card| card.points.size == 1 ? card.points * 2 : card.points }
-            .transpose
-            .map { |points| points.inject(:+) }
-            .select { |sum| sum >= 21 }
+    def cards_sums
+      @cards.map(&:points).inject do |sums, points|
+        sums.product(points).map { |sum_points| sum_points.inject(:+) }
+      end
+    end
+
+    def max_sum
+      cards_sums.max
     end
 
     def add_card(card)
@@ -24,6 +29,12 @@ module BlackJack
 
     def add_bet(bet)
       @bet = bet
+    end
+
+    def black_jack?
+      print cards_sums
+      print @cards
+      cards_sums.any? { |sum| sum == Rules::BLACK_JACK }
     end
   end
 end

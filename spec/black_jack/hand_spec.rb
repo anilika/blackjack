@@ -61,8 +61,8 @@ describe 'Hand' do
     end
     context 'when one of cards_sums equal 21' do
       it 'returns true' do
-        @hand.add_card((BlaskJack::Card.new('Ab', [11, 1])))
-        expect(@hand.black_jack?).to be truthy
+        @hand.add_card((BlackJack::Card.new('Ab', [11, 1])))
+        expect(@hand.black_jack?).to be_truthy
       end
     end
   end
