@@ -4,8 +4,8 @@ module BlackJack
   class Hand
     attr_reader :cards, :bet
 
-    def initialize
-      @cards = []
+    def initialize(cards =  [])
+      @cards = cards
       @bet = nil
     end
 
@@ -38,6 +38,10 @@ module BlackJack
     def split?
       return false if cards.size > 2
       cards.first.points == cards.last.points
+    end
+
+    def give_last_card
+      @cards.pop
     end
   end
 end
