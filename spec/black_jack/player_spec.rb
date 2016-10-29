@@ -1,9 +1,18 @@
 require 'black_jack/player'
+require 'black_jack/hand'
+require 'black_jack/card'
 
 describe 'Player' do
-  before(:all) do
+  before(:each) do
     @player = BlackJack::Player.new('John', 100)
   end
+
+  before(:all) do
+    @cards = [BlackJack::Card.new('Ds', [10]), BlackJack::Card.new('7s', [7]),
+              BlackJack::Card.new('Jb', [10]), BlackJack::Card.new('Kd', [10]),
+              BlackJack::Card.new('3s', [3])]
+  end
+
   describe 'attributes' do
     it 'allows reading for :name' do
       expect(@player.name).to eq('John')
@@ -24,9 +33,11 @@ describe 'Player' do
         expect(@player.make_bet_if_valid(20)).to be_truthy
       end
       it 'passes value that was passed as argument to hand' do
+        @player.make_bet_if_valid(20)
         expect(@player.hands.last.bet).to eq(20)
       end
       it 'subtracts value that was passed as argument from variable :cash' do
+        @player.make_bet_if_valid(20)
         expect(@player.cash).to eq(80)
       end
     end
@@ -40,7 +51,7 @@ describe 'Player' do
   describe '#take_win' do
     it 'adds value that was passed as argument to variable @cash' do
       @player.take_win(25)
-      expect(@player.cash).to eq(105)
+      expect(@player.cash).to eq(125)
     end
   end
 
@@ -53,6 +64,49 @@ describe 'Player' do
     context 'when bet invalid' do
       it 'returns false' do
         expect(@player.bet_valid?(2)).to be_falsey
+      end
+    end
+  end
+
+  describe '#reset_hands' do
+    it 'clears array in variable :hands, creates new hand and placed it in :hands' do
+      2.times { @player.hands.push(BlackJack::Hand.new) }
+      expect(@player.hands.size).to eq(3)
+      hands = @player.hands
+      @player.reset_hands
+      expect(@player.hands.size).to eq(1)
+      expect(hands).not_to include(@player.hands.first)
+    end
+  end
+
+  describe '#split' do
+    before(:each) do
+      @player.hands.push(BlackJack::Hand.new)
+    end
+
+    context 'when player is allowed to split' do
+      it 'returns true and adds to variable :hands new hand with card of split' do
+        @player.hands[0].add_card(@cards[0])
+        @player.hands[0].add_card(@cards[1])
+        @player.hands[1].add_card(@cards[2])
+        @player.hands[1].add_card(@cards[3])
+        print @player.hands.size
+        expect(@player.split(2)).to be_truthy
+        expect(@player.hands.size).to eq(3)
+        expect(@player.hands[0].cards).to eq([@cards[0], @cards[1]])
+        expect(@player.hands[1].cards).to eq([@cards[2]])
+        print @player.hands[2].cards
+        expect(@player.hands[2].cards).to eq([@cards[3]])
+      end
+    end
+
+    context 'when player is not allowed to split' do
+      it 'returns false' do
+        @player.hands[0].add_card(@cards[0])
+        @player.hands[0].add_card(@cards[1])
+        @player.hands[1].add_card(@cards[2])
+        @player.hands[1].add_card(@cards[4])
+        expect(@player.split(2)).to be_falsey
       end
     end
   end

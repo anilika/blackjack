@@ -39,5 +39,18 @@ module BlackJack
       end
       bet <= cash && bet >= Rules::MIN_BET
     end
+
+    def reset_hands
+      @hands = []
+      @hands.push(Hand.new)
+    end
+
+    def split(number_of_hand)
+      hand = @hands[number_of_hand - 1]
+      if hand.split?
+        @hands << Hand.new([hand.give_last_card])
+      end
+    end
+
   end
 end
