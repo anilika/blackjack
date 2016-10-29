@@ -66,4 +66,32 @@ describe 'Hand' do
       end
     end
   end
+
+  describe '#split?' do
+    before(:each) do
+      @hand.cards.clear
+    end
+    context 'when :cards can be split' do
+      it 'returns true' do
+        @hand.add_card(BlackJack::Card.new('Jb', [10]))
+        @hand.add_card(BlackJack::Card.new('Db', [10]))
+        expect(@hand.split?).to be_truthy
+      end
+    end
+    context 'when :cards can not be split' do
+      it 'returns false' do
+        @hand.add_card(BlackJack::Card.new('Jb', [10]))
+        @hand.add_card(BlackJack::Card.new('Ab', [11, 1]))
+        expect(@hand.split?).to be_falsey
+      end
+    end
+    context 'when :cards include more then two cards' do
+      it 'return false' do
+        @hand.add_card(BlackJack::Card.new('Jb', [10]))
+        @hand.add_card(BlackJack::Card.new('3b', [3]))
+        @hand.add_card(BlackJack::Card.new('7b', [7]))
+        expect(@hand.split?).to be_falsey
+      end
+    end
+  end
 end

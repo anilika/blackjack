@@ -32,9 +32,12 @@ module BlackJack
     end
 
     def black_jack?
-      print cards_sums
-      print @cards
       cards_sums.any? { |sum| sum == Rules::BLACK_JACK }
+    end
+
+    def split?
+      return false if cards.size > 2
+      cards.first.points == cards.last.points
     end
   end
 end
