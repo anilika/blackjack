@@ -3,11 +3,13 @@ require_relative 'rules/rules'
 module BlackJack
   class Hand
     attr_reader :cards, :bet
+    attr_accessor :splitted
 
-    def initialize(cards =  [], double = false)
+    def initialize(cards =  [], splitted = false)
       @cards = cards
       @bet = nil
-      @double = double
+      @double = false
+      @splitted = splitted
     end
 
     def cards_names
@@ -52,6 +54,7 @@ module BlackJack
 
     def double?
       return false if @double
+      return true if @splitted
       cards_sums.any? { |sum| Rules::DOUBLE_SUM.include?(sum) }
     end
   end
