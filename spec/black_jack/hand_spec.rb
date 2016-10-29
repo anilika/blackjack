@@ -6,7 +6,8 @@ describe 'Hand' do
     @card = BlackJack::Card.new('As', [11, 1])
     @cards = [BlackJack::Card.new('9s', [9]), BlackJack::Card.new('Ad', [11, 1]),
               BlackJack::Card.new('Jd', [10]), BlackJack::Card.new('Db', [10]),
-              BlackJack::Card.new('3b', [3]), BlackJack::Card.new('7b', [7])]
+              BlackJack::Card.new('3b', [3]), BlackJack::Card.new('7b', [7]),
+              BlackJack::Card.new('5b', [5]), BlackJack::Card.new('2b', [2])]
   end
   before (:each) do
     @hand = BlackJack::Hand.new([@card])
@@ -118,4 +119,49 @@ describe 'Hand' do
       expect(@hand.cards).to contain_exactly(@card)
     end
   end
+
+  describe '#double?' do
+    context 'when hand can to double' do
+      it 'returns true' do
+        @hand.add_bet(20)
+        expect(@hand.double?).to be_truthy
+        @hand.cards.clear
+        @hand.add_card(@cards[4])
+        @hand.add_card(@cards[5])
+        expect(@hand.double?).to be_truthy
+        @hand.cards.clear
+        @hand.add_card(@cards[6])
+        @hand.add_card(@cards[7])
+        @hand.add_card(@cards[4])
+        expect(@hand.double?).to be_truthy
+      end
+    end
+    context 'when hand can not to double' do
+      it 'returns false' do
+        @hand.add_bet(20)
+        @hand.add_card(@cards[0])
+        @hand.add_card(@cards[4])
+        expect(@hand.double?).to be_falsey
+        @hand.cards.clear
+        @hand.add_card(@cards[4])
+        expect(@hand.double?).to be_falsey
+        @hand.cards.clear
+        @hand.add_card(@cards[6])
+        @hand.add_card(@cards[7])
+        @hand.add_card(@cards[4])
+        @hand.double
+        expect(@hand.double?).to be_falsey
+      end
+    end
+  end
+
+  describe '#double' do
+    it 'doubles :bet' do
+      @hand.add_bet(20)
+      expect(@hand.bet).to eq(20)
+      @hand.double
+      expect(@hand.bet).to eq(40)
+    end
+  end
+
 end

@@ -4,9 +4,10 @@ module BlackJack
   class Hand
     attr_reader :cards, :bet
 
-    def initialize(cards =  [])
+    def initialize(cards =  [], double = false)
       @cards = cards
       @bet = nil
+      @double = double
     end
 
     def cards_names
@@ -42,6 +43,16 @@ module BlackJack
 
     def give_last_card
       @cards.pop
+    end
+
+    def double
+      @double = true
+      @bet *= 2
+    end
+
+    def double?
+      return false if @double
+      cards_sums.any? { |sum| Rules::DOUBLE_SUM.include?(sum) }
     end
   end
 end
