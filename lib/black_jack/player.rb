@@ -48,9 +48,19 @@ module BlackJack
     def split(number_of_hand)
       hand = @hands[number_of_hand - 1]
       if hand.split?
-        @hands << Hand.new([hand.give_last_card])
+        @hands << Hand.new([hand.give_last_card], true)
+        hand.splitted = true
       end
     end
 
+    def can_double?(number_of_hand)
+      @hands[number_of_hand -1].double?
+    end
+
+    def double(number_of_hand)
+      hand = @hands[number_of_hand -1]
+      @cash -= hand.bet
+      hand.double
+    end
   end
 end

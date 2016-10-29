@@ -110,4 +110,36 @@ describe 'Player' do
       end
     end
   end
+
+  describe '#can_double?' do
+    context 'when player hand contains 10 or 11 points' do
+      it 'returns true' do
+        @player.hands[0].add_card(@cards[0])
+        expect(@player.can_double?(1)).to be_truthy
+      end
+    end
+    context 'when player just made split' do
+      it 'returns true' do
+        @player.hands[0].add_card(@cards[0])
+        @player.hands[0].add_card(@cards[2])
+        @player.split(1)
+        expect(@player.can_double?(2)).to be_truthy
+      end
+    end
+    context 'when else' do
+      it 'returns false' do
+        @player.hands[0].add_card(@cards[1])
+        expect(@player.can_double?(1)).to be_falsey
+      end
+    end
+  end
+
+  describe '#double' do
+    it 'to doubles bets' do
+      @player.make_bet_if_valid(20)
+      @player.double(1)
+      expect(@player.hands.first.bet).to eq(40)
+      expect(@player.cash).to eq(60)
+    end
+  end
 end
