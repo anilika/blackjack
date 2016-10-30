@@ -26,6 +26,14 @@ describe 'Dealer' do
     end
   end
 
+  describe '#sums_cards' do
+    it 'returns sums of dealers cards as array' do
+      @dealer.cards.push(BlackJack::Card.new('As', [11, 1]))
+      @dealer.cards.push(BlackJack::Card.new('Ad', [11, 1]))
+      expect(@dealer.sums_cards).to eq([12, 2])
+    end
+  end
+
   describe '#give_win' do
     it 'takes a bet and situation and returns bet multiplied by coefficient of situation' do
       bet = 20

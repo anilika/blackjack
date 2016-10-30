@@ -15,6 +15,12 @@ module BlackJack
       @card_deck.upper_card
     end
 
+    def sums_cards
+      @cards.map(&:points).inject do |sums, points|
+        sums.product(points).map { |sum_points| sum_points.inject(:+) }
+      end.uniq.select { |sum| sum <= 21 }
+    end
+
     def give_win(situation, bet)
       bet * Rules::BET[situation]
     end
