@@ -1,5 +1,5 @@
 require_relative 'card_deck'
-require_relative 'rules/rules'
+require_relative 'rules'
 
 module BlackJack
   class Dealer

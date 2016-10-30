@@ -1,5 +1,5 @@
 require_relative 'hand'
-require_relative 'rules/rules'
+require_relative 'rules'
 
 module BlackJack
   class Player
@@ -12,8 +12,8 @@ module BlackJack
       @hands = [Hand.new]
     end
 
-    def make_rate(rate)
-      @cash -= rate
+    def make_bet(bet)
+      @cash -= bet
       @bet = bet
     end
 

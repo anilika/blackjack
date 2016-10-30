@@ -1,4 +1,4 @@
-require 'black_jack/rules/rules'
+require 'black_jack/rules'
 
 describe 'Rules' do
   describe 'constants' do
