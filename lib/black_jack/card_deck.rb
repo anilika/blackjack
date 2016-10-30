@@ -3,7 +3,7 @@ require_relative 'card'
 module BlackJack
   class CardDeck
     NAMES = %w(2 3 4 5 6 7 8 9 10 J D K A).freeze
-    SUITS = %w(b s d h).freeze
+    SUITS = %w(c s d h).freeze
     attr_reader :cards
 
     def initialize
