@@ -12,11 +12,6 @@ module BlackJack
       @hands = [Hand.new]
     end
 
-    def make_bet(bet)
-      @cash -= bet
-      @bet = bet
-    end
-
     def take_win(win)
       @cash += win
     end
