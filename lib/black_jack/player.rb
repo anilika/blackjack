@@ -16,23 +16,9 @@ module BlackJack
       @cash += win
     end
 
-    def make_bet_if_valid(bet)
-      if bet_valid?(bet)
-        hands.first.add_bet(bet)
-        @cash -= bet
-        true
-      else
-        false
-      end
-    end
-
-    def bet_valid?(bet)
-      begin
-        bet = Integer(bet)
-      rescue
-        return false
-      end
-      bet <= cash && bet >= Rules::MIN_BET
+    def make_bet(bet)
+      hands.first.add_bet(bet)
+      @cash -= bet
     end
 
     def reset_hands

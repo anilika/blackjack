@@ -27,24 +27,14 @@ describe 'Player' do
     end
   end
 
-  describe '#make_bet_if_valid' do
-    context 'when bet is valid' do
-      it 'returns true' do
-        expect(@player.make_bet_if_valid(20)).to be_truthy
-      end
-      it 'passes value that was passed as argument to hand' do
-        @player.make_bet_if_valid(20)
-        expect(@player.hands.last.bet).to eq(20)
-      end
-      it 'subtracts value that was passed as argument from variable :cash' do
-        @player.make_bet_if_valid(20)
-        expect(@player.cash).to eq(80)
-      end
+  describe '#make_bet' do
+    it 'passes value that was passed as argument to hand' do
+      @player.make_bet(20)
+      expect(@player.hands.last.bet).to eq(20)
     end
-    context 'when bet is not valid' do
-      it 'return false' do
-        expect(@player.make_bet_if_valid(1)).to be_falsey
-      end
+    it 'subtracts value that was passed as argument from variable :cash' do
+      @player.make_bet(20)
+      expect(@player.cash).to eq(80)
     end
   end
 
@@ -52,19 +42,6 @@ describe 'Player' do
     it 'adds value that was passed as argument to variable @cash' do
       @player.take_win(25)
       expect(@player.cash).to eq(125)
-    end
-  end
-
-  describe '#bet_valid?' do
-    context 'when bet valid' do
-      it 'returns true' do
-        expect(@player.bet_valid?(20)).to be_truthy
-      end
-    end
-    context 'when bet invalid' do
-      it 'returns false' do
-        expect(@player.bet_valid?(2)).to be_falsey
-      end
     end
   end
 
@@ -136,7 +113,7 @@ describe 'Player' do
 
   describe '#double' do
     it 'to doubles bets' do
-      @player.make_bet_if_valid(20)
+      @player.make_bet(20)
       @player.double(1)
       expect(@player.hands.first.bet).to eq(40)
       expect(@player.cash).to eq(60)
