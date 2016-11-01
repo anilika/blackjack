@@ -7,7 +7,7 @@ module BlackJack
     DOUBLE_SUM = [10, 11]
     PLAYER_NAME = { more: 2, less: 11 }
     PLAYER_CASH = { more: MIN_BET, less: 50000 }
-    PLAYER_ACTION = [:hit, :split, :double]
+    PLAYER_ACTION = [:split, :double, :hit, :stand]
     PLAYER_YES_NO = [:yes, :no]
   end
 end
