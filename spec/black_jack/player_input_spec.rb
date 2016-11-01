@@ -49,6 +49,18 @@ describe 'PlayerInput' do
     end
   end
 
+  describe '.number_of_hands' do
+    it 'returns passed number as a number' do
+      module BlackJack::Input
+        ACTIONS = ['sdsa', '#123', 'yes', 'Doouuble', 'hit', '1']
+        def self.take_input
+          ACTIONS.shift
+        end
+      end
+      expect(BlackJack::PlayerInput.number_of_hands).to eq(1)
+    end
+  end
+
   describe '.yes_no' do
     it 'returns passed yes or no' do
       module BlackJack::Input

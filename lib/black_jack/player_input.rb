@@ -55,5 +55,16 @@ module BlackJack
         end
       end
     end
+
+    def self.number_of_hands
+        loop do
+          begin
+            number = Integer(Input.take_input)
+            return number
+          rescue
+            next
+          end
+        end
+    end
   end
 end
