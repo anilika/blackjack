@@ -41,28 +41,22 @@ module BlackJack
             GameOutput.player_actions
             action = PlayerInput.game_action
             break if action == :stand
-            send(action, player)
+            send(action, hand, player)
             break if hand.loose?
           end
         end
       end
     end
 
-    def hit(player)
-      if player.hands.size == 1
-        numb = 0
-      else
-        GameOutput.number_of_hands
-        numb = PlayerInput.number_of_hands - 1
-      end
-      player.hands[numb].add_card(@dealer.deal_card)
+    def hit(hand, player)
+      hand.add_card(@dealer.deal_card)
       GameOutput.game_place(@dealer, player)
-      if player.hands[numb].loose?
+      if hand.loose?
         GameOutput.bust
       end
     end
 
-    def double(player)
+    def double(hand, player)
       if player.hands.size == 1
         if player.can_double?(1)
           puts 'yes'
