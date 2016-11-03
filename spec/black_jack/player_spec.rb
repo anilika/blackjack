@@ -110,7 +110,7 @@ describe 'Player' do
       end
     end
 
-    cantext 'when passed wring number of hand' do
+    context 'when passed wring number of hand' do
       it 'returns false' do
 
       end

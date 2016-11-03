@@ -3,7 +3,7 @@ require_relative 'rules'
 module BlackJack
   class Hand
     attr_reader :cards, :bet
-    attr_accessor :splitted
+    attr_accessor :splitted, :black_jack, :win
 
     def initialize(cards =  [], splitted = false)
       @cards = cards
@@ -22,8 +22,8 @@ module BlackJack
       end
     end
 
-    def max_sum
-      cards_sums.max
+    def max_valid_sum
+      cards_sums.select { |sum| sum <= Rules::BLACK_JACK }.max
     end
 
     def min_sum
@@ -63,7 +63,11 @@ module BlackJack
     end
 
     def loose?
-      cards_sums.min >= 21
+      cards_sums.min > 21
+    end
+
+    def bust?
+      max_valid_sum ? false : true
     end
   end
 end
