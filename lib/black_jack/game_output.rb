@@ -81,6 +81,10 @@ DDD
       print "Your hand#{' ' + num.to_s unless num.size.zero?} couldn't double.\n"
     end
 
+    def self.cant_split(num = '')
+      print "Your hand#{' ' + num.to_s unless num.size.zero?} couldn't split.\n"
+    end
+
     def self.number_of_hands
       print "Enter the number of hands"
     end
@@ -89,12 +93,32 @@ DDD
       # system 'clear'
       print "------------------------------------------------------\n"
       print "Dealer cards:\n"
-      print "#{cards(dealer.cards)}"
-      print "Dealer score: #{dealer.sums_cards.join(', ')}\n\n"
+      print "#{cards(dealer.hand.cards)}"
+      print "Dealer score: #{dealer.hand.cards_sums.join(', ')}\n\n"
       print "Player #{player.name} cards:\n"
       hands(player.hands)
       print "cash: #{player.cash}\n"
       print "------------------------------------------------------\n"
+    end
+
+    def self.end_round_place(dealer, players)
+      print "------------------------------------------------------\n"
+      print "Dealer cards:\n"
+      print "#{cards(dealer.hand.cards)}"
+      print "Dealer score: #{dealer.hand.cards_sums.join(', ')}\n\n"
+      print "Dealer is Bust!\n" unless dealer.hand.max_valid_sum
+      print "------------------------------------------------------\n"
+      players.each do |player|
+        print "Player #{player.name}:"
+          player.hands.each do |hand|
+            status = hand.win ? 'won' : 'lost'
+            print "Hand #{player.hands.index(hand)}: #{status}!\n"
+            cards(hand.cards)
+            print "score: #{hand.cards_sums.join(', ')}\n"
+          end
+        print "cash: #{player.cash}\n"
+        print "------------------------------------------------------\n"
+      end
     end
 
     def self.cards(cards)
@@ -125,11 +149,21 @@ DDD
       print d
     end
 
+    def self.start_place(players)
+      print "+----------+\n"
+      print "|  Dealer  |\n"
+      print "+----------+\n"
+      players.each do |player|
+        print "|Player: #{player.name}, cash: #{player.cash}, bet: #{player.bet}\n"
+        print "+-------------------------------------------------------------\n"
+      end
+    end
+
     def self.hands(hands)
       hands.each_index do |index|
         print "Hand #{index + 1}:  bet -- #{hands[index].bet}\n"
         print "#{cards(hands[index].cards)}"
-        print "Hand#{' ' + (index + 1).to_s if index > 0} score: #{hands[index].cards_sums.join(' ,')}\n"
+        print "Hand#{' ' + (index + 1).to_s if index > 0} score: #{hands[index].cards_sums.join(', ')}\n"
       end
     end
 
