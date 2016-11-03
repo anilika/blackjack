@@ -70,6 +70,13 @@ describe 'Hand' do
     end
   end
 
+  describe '#min_sum' do
+    it 'returns minimum sum of cards' do
+      @hand.add_card(@cards[0])
+      expect(@hand.max_sum).to eq(10)
+    end
+  end
+
   describe '#black_jack?' do
     context 'when no one of cards_sums equal 21' do
       it 'returns false' do

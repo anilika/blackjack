@@ -26,6 +26,10 @@ module BlackJack
       cards_sums.max
     end
 
+    def min_sum
+      cards_sums.min
+    end
+
     def add_card(card)
       @cards << card
     end
