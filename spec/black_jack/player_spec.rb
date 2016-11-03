@@ -72,7 +72,7 @@ describe 'Player' do
         expect(@player.hands.size).to eq(3)
         expect(@player.hands[0].cards).to eq([@cards[0], @cards[1]])
         expect(@player.hands[1].cards).to eq([@cards[2]])
-        print @player.hands[2].cards
+        # print @player.hands[2].cards
         expect(@player.hands[2].cards).to eq([@cards[3]])
       end
     end
@@ -107,6 +107,12 @@ describe 'Player' do
       it 'returns false' do
         @player.hands[0].add_card(@cards[1])
         expect(@player.can_double?(1)).to be_falsey
+      end
+    end
+
+    cantext 'when passed wring number of hand' do
+      it 'returns false' do
+
       end
     end
   end

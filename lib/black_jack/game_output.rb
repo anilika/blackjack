@@ -49,25 +49,52 @@ DDD
     end
 
     def self.player_name(number)
-      print "Enter the name of Player #{number}.\n"
+      print "Enter the name of Player #{number}: \n"
     end
 
     def self.player_cash(number)
-      print "Enter cash for Player #{number}"
+      print "Enter cash for Player #{number}: \n"
     end
 
     def self.doing_bet(player_name)
       print "Player #{player_name}. What is your bet?\n"
     end
 
+    def self.player_turn(player_name)
+      print "------------------------------------------------------\n"
+      print "Player's #{player_name} turn\n"
+      print "------------------------------------------------------\n"
+    end
+
+    def self.player_actions
+      print 'Your actions(hit; stand; double-number of hand; split-number of hand):'
+    end
+
+    def self.bust
+      print "------------------------------------------------------\n"
+      print "Bust! You are loose.\n"
+      print "------------------------------------------------------\n"
+      sleep(3)
+    end
+
+    def self.cant_double(num = '')
+      print "Your hand#{' ' + num.to_s unless num.size.zero?} couldn't double.\n"
+    end
+
+    def self.number_of_hands
+      print "Enter the number of hands"
+    end
+
     def self.game_place(dealer, player)
-      place = <<PPP
-Dealer cards:
-#{cards(dealer.cards)}
-Dealer score: #{dealer.sums_cards.join(', ')}
-Player #{player.name} cards:
-#{hands(player.hands)}
-PPP
+      # system 'clear'
+      print "------------------------------------------------------\n"
+      print "Dealer cards:\n"
+      print "#{cards(dealer.cards)}"
+      print "Dealer score: #{dealer.sums_cards.join(', ')}\n\n"
+      print "Player #{player.name} cards:\n"
+      hands(player.hands)
+      print "cash: #{player.cash}\n"
+      print "------------------------------------------------------\n"
     end
 
     def self.cards(cards)
@@ -99,24 +126,23 @@ PPP
     end
 
     def self.hands(hands)
-      text = ''
       hands.each_index do |index|
         print "Hand #{index + 1}:  bet -- #{hands[index].bet}\n"
-        print "#{cards(hands[index].cards)}\n"
+        print "#{cards(hands[index].cards)}"
+        print "Hand#{' ' + (index + 1).to_s if index > 0} score: #{hands[index].cards_sums.join(' ,')}\n"
       end
-      # print text
     end
 
     def self.player_win
-      print 'Congratulations! You are winner!'
+      'Congratulations! You are winner!'
     end
   end
 end
 
-cards = [BlackJack::Card.new('As', [11, 1]), BlackJack::Card.new('7s', [7]), BlackJack::Card.new('10s', [10])]
-cards_2 = [BlackJack::Card.new('As', [11, 1]), BlackJack::Card.new('7s', [7])]
+# cards = [BlackJack::Card.new('As', [11, 1]), BlackJack::Card.new('7s', [7]), BlackJack::Card.new('10s', [10])]
+# cards_2 = [BlackJack::Card.new('As', [11, 1]), BlackJack::Card.new('7s', [7])]
 # BlackJack::GameOutput.cards(cards)
-
-hands = [BlackJack::Hand.new(cards), BlackJack::Hand.new(cards_2)]
-hands.each { |hand| hand.add_bet(30)}
-BlackJack::GameOutput.hands(hands)
+#
+# hands = [BlackJack::Hand.new(cards), BlackJack::Hand.new(cards_2)]
+# hands.each { |hand| hand.add_bet(30)}
+# BlackJack::GameOutput.hands(hands)
