@@ -61,5 +61,9 @@ module BlackJack
       return true if @splitted
       cards_sums.any? { |sum| Rules::DOUBLE_SUM.include?(sum) }
     end
+
+    def loose?
+      cards_sums.min >= 21
+    end
   end
 end

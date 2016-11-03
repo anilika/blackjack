@@ -52,7 +52,7 @@ describe 'Hand' do
   describe '#cards_name' do
     it 'returns name of each card in hand as array of string' do
       @hand.add_card(@cards[0])
-      expect(@hand.cards_names).to eq(['As', '9s'])
+      expect(@hand.cards_names).to eq(['A', '9'])
     end
   end
 
@@ -73,7 +73,7 @@ describe 'Hand' do
   describe '#min_sum' do
     it 'returns minimum sum of cards' do
       @hand.add_card(@cards[0])
-      expect(@hand.max_sum).to eq(10)
+      expect(@hand.min_sum).to eq(10)
     end
   end
 
@@ -168,6 +168,23 @@ describe 'Hand' do
       expect(@hand.bet).to eq(20)
       @hand.double
       expect(@hand.bet).to eq(40)
+    end
+  end
+
+  describe '#loose?' do
+    context 'when minimum sum cards equal or more than 21' do
+      it 'returns true' do
+        @hand.add_card(@cards[2])
+        @hand.add_card(@cards[5])
+        @hand.add_card(@cards[6])
+        expect(@hand.loose?).to be_truthy
+      end
+    end
+    context 'when minimum sum cards equal or less than 21' do
+      it 'returns false' do
+        @hand.add_card(@cards[2])
+        expect(@hand.loose?).to be_falsey
+      end
     end
   end
 
