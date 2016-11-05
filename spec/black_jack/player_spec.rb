@@ -65,14 +65,14 @@ describe 'Player' do
       it 'returns true and adds to variable :hands new hand with card of split' do
         @player.hands[0].add_card(@cards[0])
         @player.hands[0].add_card(@cards[1])
+        @player.hands[0].add_bet(20)
         @player.hands[1].add_card(@cards[2])
         @player.hands[1].add_card(@cards[3])
-        print @player.hands.size
-        expect(@player.split(2)).to be_truthy
+        @player.hands[1].add_bet(15)
+        expect(@player.split(@player.hands.last)).to be_truthy
         expect(@player.hands.size).to eq(3)
         expect(@player.hands[0].cards).to eq([@cards[0], @cards[1]])
         expect(@player.hands[1].cards).to eq([@cards[2]])
-        # print @player.hands[2].cards
         expect(@player.hands[2].cards).to eq([@cards[3]])
       end
     end
@@ -83,7 +83,7 @@ describe 'Player' do
         @player.hands[0].add_card(@cards[1])
         @player.hands[1].add_card(@cards[2])
         @player.hands[1].add_card(@cards[4])
-        expect(@player.split(2)).to be_falsey
+        expect(@player.split(@player.hands.last)).to be_falsey
       end
     end
   end
@@ -99,7 +99,8 @@ describe 'Player' do
       it 'returns true' do
         @player.hands[0].add_card(@cards[0])
         @player.hands[0].add_card(@cards[2])
-        @player.split(1)
+        @player.hands[0].add_bet(15)
+        @player.split(@player.hands.first)
         expect(@player.can_double?(2)).to be_truthy
       end
     end
@@ -120,7 +121,7 @@ describe 'Player' do
   describe '#double' do
     it 'to doubles bets' do
       @player.make_bet(20)
-      @player.double(1)
+      @player.double(@player.hands.last)
       expect(@player.hands.first.bet).to eq(40)
       expect(@player.cash).to eq(60)
     end

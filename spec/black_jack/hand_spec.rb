@@ -63,10 +63,10 @@ describe 'Hand' do
     end
   end
 
-  describe '#max_sum' do
+  describe '#max_valid_sum' do
     it 'returns maximum sum of cards' do
       @hand.add_card(@cards[0])
-      expect(@hand.max_sum).to eq(20)
+      expect(@hand.max_valid_sum).to eq(20)
     end
   end
 
